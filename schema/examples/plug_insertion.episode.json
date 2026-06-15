@@ -1,0 +1,42 @@
+{
+  "episode_id": "ep_0001",
+  "plan_id": "plug_insertion_v1",
+  "plan_version": "1.0.0",
+  "duration_s": 14.2,
+  "meta": {
+    "site_id": "site_A_3f9c1",
+    "operator_id": "op_017_8ab2",
+    "consent_ref": "consent/2026-06-15_op017.json",
+    "recorded_at": "2026-06-15T08:00:00Z",
+    "device": { "headset": "Quest3", "horizonos": "v83", "external_cam": "RealSense_D435i" },
+    "calibration_ref": "calib/site_A_2026-06-15.json"
+  },
+  "streams": {
+    "egocentric_rgb": { "uri": "ep_0001/ego_rgb.mp4", "fps": 30, "resolution": [1280, 960] },
+    "egocentric_depth": { "uri": "ep_0001/ego_depth.mp4", "fps": 30 },
+    "external_rgb": { "uri": "ep_0001/ext_rgb.mp4", "fps": 30 },
+    "head_pose": { "uri": "ep_0001/head_pose.parquet" },
+    "hand_pose": { "uri": "ep_0001/hand_pose.parquet" },
+    "object_poses": { "uri": "ep_0001/object_poses.parquet" },
+    "force": {
+      "uri": "ep_0001/force.parquet",
+      "sources": [
+        { "source_id": "socket_J1", "type": "force_1d", "unit": "N" },
+        { "source_id": "socket_J3", "type": "force_1d", "unit": "N" }
+      ]
+    }
+  },
+  "steps": [
+    { "step_id": "s1", "instruction": "把電源接頭插入 J1 插座", "t_start": 2.40, "t_end": 6.85, "outcome": "success", "peak_force_n": 36.2 },
+    { "step_id": "s2", "instruction": "把訊號排線插入 J2 插座,聽到喀聲表示到位", "t_start": 6.85, "t_end": 10.10, "outcome": "success" },
+    { "step_id": "s3", "instruction": "把接地線插入 J3 插座", "t_start": 10.10, "t_end": 13.90, "outcome": "success", "peak_force_n": 21.4 }
+  ],
+  "events": [
+    { "t": 2.40, "type": "step_start", "step_id": "s1" },
+    { "t": 6.85, "type": "step_success", "step_id": "s1" },
+    { "t": 6.85, "type": "step_start", "step_id": "s2" },
+    { "t": 10.10, "type": "step_success", "step_id": "s2" },
+    { "t": 10.10, "type": "step_start", "step_id": "s3" },
+    { "t": 13.90, "type": "step_success", "step_id": "s3" }
+  ]
+}

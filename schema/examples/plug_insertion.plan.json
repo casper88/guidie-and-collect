@@ -1,0 +1,36 @@
+{
+  "plan_id": "plug_insertion_v1",
+  "version": "1.0.0",
+  "task_name": "依序插接前面板連接器",
+  "language": "zh-TW",
+  "objects": [
+    { "object_id": "harness", "name": "線束", "model_ref": "models/harness.obj" },
+    { "object_id": "panel", "name": "前面板", "model_ref": "models/panel.obj" }
+  ],
+  "steps": [
+    {
+      "step_id": "s1",
+      "order": 1,
+      "type": "insert",
+      "instruction": "把電源接頭插入 J1 插座",
+      "target": { "object_id": "panel", "point_id": "J1" },
+      "success_criterion": { "type": "force_threshold", "force_n": 35.0, "tolerance_mm": 1.0 }
+    },
+    {
+      "step_id": "s2",
+      "order": 2,
+      "type": "insert",
+      "instruction": "把訊號排線插入 J2 插座,聽到喀聲表示到位",
+      "target": { "object_id": "panel", "point_id": "J2" },
+      "success_criterion": { "type": "click_detected" }
+    },
+    {
+      "step_id": "s3",
+      "order": 3,
+      "type": "insert",
+      "instruction": "把接地線插入 J3 插座",
+      "target": { "object_id": "panel", "point_id": "J3" },
+      "success_criterion": { "type": "force_threshold", "force_n": 20.0, "tolerance_mm": 1.5 }
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guidie-and-collect/schema/episode.schema.json",
+  "title": "Episode (embodiment-agnostic master)",
+  "description": "One recorded execution of a guided task. The master representation: rich, embodiment-agnostic human demonstration with force/contact as a first-class channel. Exportable to LeRobot.",
+  "type": "object",
+  "required": ["episode_id", "plan_id", "plan_version", "meta", "streams", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "episode_id": { "type": "string", "pattern": "^[a-zA-Z0-9_]+$" },
+    "plan_id": { "type": "string" },
+    "plan_version": { "type": "string" },
+    "duration_s": { "type": "number", "minimum": 0 },
+    "meta": {
+      "type": "object",
+      "required": ["site_id", "operator_id", "consent_ref", "recorded_at"],
+      "description": "consent_ref is mandatory: selling/licensing data requires a clean consent chain (see docs/06_ROADMAP.md governance).",
+      "properties": {
+        "site_id": { "type": "string", "description": "de-identified / hashed" },
+        "operator_id": { "type": "string", "description": "de-identified / hashed" },
+        "consent_ref": { "type": "string" },
+        "recorded_at": { "type": "string", "format": "date-time" },
+        "device": { "type": "object" },
+        "calibration_ref": { "type": "string" }
+      }
+    },
+    "streams": {
+      "type": "object",
+      "description": "Time-synchronized channels sharing one episode clock (seconds from 0).",
+      "properties": {
+        "egocentric_rgb": { "$ref": "#/$defs/videoStream" },
+        "egocentric_depth": { "$ref": "#/$defs/videoStream" },
+        "external_rgb": { "$ref": "#/$defs/videoStream" },
+        "head_pose": { "$ref": "#/$defs/tabularStream" },
+        "hand_pose": { "$ref": "#/$defs/tabularStream" },
+        "object_poses": { "$ref": "#/$defs/tabularStream" },
+        "force": {
+          "allOf": [{ "$ref": "#/$defs/tabularStream" }],
+          "description": "Force/contact channel — the moat for contact-rich insertion. See invariant: required when any step uses force_threshold/click_detected.",
+          "properties": {
+            "uri": { "type": "string" },
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["source_id", "type", "unit"],
+                "properties": {
+                  "source_id": { "type": "string" },
+                  "type": { "type": "string", "enum": ["force_1d", "force_3d", "torque", "tactile"] },
+                  "unit": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "instruction", "t_start", "t_end", "outcome"],
+        "additionalProperties": false,
+        "properties": {
+          "step_id": { "type": "string" },
+          "instruction": { "type": "string" },
+          "t_start": { "type": "number", "minimum": 0 },
+          "t_end": { "type": "number", "minimum": 0 },
+          "outcome": { "type": "string", "enum": ["success", "fail", "corrected"] },
+          "peak_force_n": { "type": "number" }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["t", "type"],
+        "properties": {
+          "t": { "type": "number", "minimum": 0 },
+          "type": { "type": "string", "enum": ["step_start", "step_success", "step_fail", "correction"] },
+          "step_id": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "videoStream": {
+      "type": "object",
+      "required": ["uri"],
+      "properties": {
+        "uri": { "type": "string" },
+        "fps": { "type": "number", "minimum": 1 },
+        "resolution": { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 }
+      }
+    },
+    "tabularStream": {
+      "type": "object",
+      "required": ["uri"],
+      "properties": { "uri": { "type": "string" } }
+    }
+  }
+}
