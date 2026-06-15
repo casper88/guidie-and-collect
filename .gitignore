@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Data (never commit raw captured data — it is large and may contain PII)
+data/
+*.mp4
+*.bag
+*.parquet
+*.npy
+*.npz
+!schema/examples/**
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
