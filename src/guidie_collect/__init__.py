@@ -19,6 +19,8 @@ __all__ = [
     "validate_episode",
     "build_episode_from_capture",
     "write_lerobot_metadata",
+    "HandFrame",
+    "get_adapter",
 ]
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -26,6 +28,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from .episode import Episode
     from .export_lerobot import write_lerobot_metadata
     from .guidance import GuidancePlan
+    from .retarget import HandFrame, get_adapter
     from .validate import ValidationReport, validate_episode
 
 _LAZY = {
@@ -35,6 +38,8 @@ _LAZY = {
     "validate_episode": "guidie_collect.validate",
     "build_episode_from_capture": "guidie_collect.autolabel",
     "write_lerobot_metadata": "guidie_collect.export_lerobot",
+    "HandFrame": "guidie_collect.retarget",
+    "get_adapter": "guidie_collect.retarget",
 }
 
 

@@ -37,3 +37,7 @@ jobs:
             schema/examples/plug_insertion.plan.json \
             schema/examples/plug_insertion.episode.json /tmp/ep_0002.episode.json \
             -o /tmp/lerobot_ds
+          python -m guidie_collect.export_lerobot \
+            schema/examples/plug_insertion.plan.json \
+            schema/examples/plug_insertion.episode.json \
+            -o /tmp/lerobot_pj --embodiment parallel_jaw
