@@ -43,6 +43,8 @@ G&C 拆成四個鬆耦合的子系統。核心設計原則:**引導腳本(guidan
 
 > 為何不直接只存 LeRobot?因為 LeRobot 綁定一個動作空間(某個 robot embodiment),會**犧牲通用性**。我們存更上游的 master,再匯出。詳見 `05_DATA_SPEC.md`。
 
+**Retarget(衍生 SKU 的產生)**:`retarget.py` 提供可插拔的 `EmbodimentAdapter`,把 master 的人手動作轉成特定 embodiment 的動作空間。已實作 `human`(passthrough,通用預設)與 `parallel_jaw`(手腕 6DoF → EE 6DoF + 由 pinch 距離映射的夾爪寬度,UMI 式)。匯出時用 `--embodiment` 即產生對應的衍生 SKU(`info.json` 的 `action` 與 `robot_type` 隨之改變)。多指靈巧手 retarget 委派外部 `dex-retargeting`(見 `02`)。
+
 ## 本 repo 的範圍邊界
 
 | 子系統 | 本 repo | 後續/外部 |

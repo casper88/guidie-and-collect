@@ -6,6 +6,7 @@ from pathlib import Path
 from guidie_collect.episode import Episode
 from guidie_collect.export_lerobot import build_metadata, write_lerobot_metadata
 from guidie_collect.guidance import GuidancePlan
+from guidie_collect.retarget import get_adapter
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = REPO_ROOT / "schema" / "examples"
@@ -57,6 +58,23 @@ def test_episodes_and_segments():
     for seg in meta["segments"]:
         assert 0 <= seg["task_index"] < n_tasks
         assert seg["frame_start"] < seg["frame_end"]
+
+
+def test_embodiment_override_produces_derived_sku():
+    plan = GuidancePlan.from_file(PLAN_PATH)
+    ep = Episode.from_file(EPISODE_PATH)
+    # raw master: human action space
+    raw = build_metadata([ep], plan, fps=FPS)
+    assert raw["info"]["robot_type"] == "human_master"
+    assert raw["info"]["features"]["action"]["shape"] == [12]  # two-hand wrist
+    # retargeted SKU: parallel-jaw action space
+    pj = build_metadata([ep], plan, fps=FPS, adapter=get_adapter("parallel_jaw"))
+    assert pj["info"]["robot_type"] == "parallel_jaw"
+    assert pj["info"]["features"]["action"]["shape"] == [7]
+    assert pj["info"]["features"]["action"]["names"][-1] == "gripper_width"
+    # everything else (tasks/segments/force) is unchanged by retargeting
+    assert pj["tasks"] == raw["tasks"]
+    assert "observation.force" in pj["info"]["features"]
 
 
 def test_write_metadata_files(tmp_path):

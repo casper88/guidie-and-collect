@@ -30,6 +30,7 @@ from typing import Any
 
 from .episode import Episode
 from .guidance import GuidancePlan
+from .retarget import EmbodimentAdapter, available_adapters, get_adapter
 
 CODEBASE_VERSION = "v2.1"
 ROBOT_TYPE = "human_master"  # embodiment-agnostic; buyers retarget downstream
@@ -152,8 +153,15 @@ def build_metadata(
     episodes: list[Episode],
     plan: GuidancePlan,
     fps: int = 30,
+    adapter: EmbodimentAdapter | None = None,
 ) -> dict[str, Any]:
-    """Build (but don't write) the LeRobot meta structures from master episodes."""
+    """Build (but don't write) the LeRobot meta structures from master episodes.
+
+    If ``adapter`` is given, the ``action`` feature is replaced by the adapter's
+    retargeted action space and ``robot_type`` is set to the embodiment name —
+    i.e. this produces a derived, embodiment-specific SKU rather than the raw
+    human master.
+    """
     # Task table: top-level task first, then every distinct step instruction.
     task_strings: list[str] = [plan.task_name]
     for ep in episodes:
@@ -191,9 +199,15 @@ def build_metadata(
         for name, spec in _lerobot_features(ep, plan).items():
             features.setdefault(name, spec)
 
+    # Derived SKU: replace the human action with the retargeted action space.
+    robot_type = ROBOT_TYPE
+    if adapter is not None and "action" in features:
+        features["action"] = adapter.feature_spec()["action"]
+        robot_type = adapter.embodiment
+
     info = {
         "codebase_version": CODEBASE_VERSION,
-        "robot_type": ROBOT_TYPE,
+        "robot_type": robot_type,
         "total_episodes": len(episodes),
         "total_frames": total_frames,
         "total_tasks": len(task_strings),
@@ -219,9 +233,10 @@ def write_lerobot_metadata(
     episodes: list[Episode],
     plan: GuidancePlan,
     fps: int = 30,
+    adapter: EmbodimentAdapter | None = None,
 ) -> dict[str, Any]:
     """Write the LeRobot ``meta/`` directory and return the built structures."""
-    meta = build_metadata(episodes, plan, fps=fps)
+    meta = build_metadata(episodes, plan, fps=fps, adapter=adapter)
     meta_dir = Path(out_dir) / "meta"
     meta_dir.mkdir(parents=True, exist_ok=True)
     with open(meta_dir / "info.json", "w", encoding="utf-8") as fh:
@@ -238,16 +253,23 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("episodes", nargs="+", help="one or more master episode JSON files")
     parser.add_argument("-o", "--out", required=True, help="output dataset directory")
     parser.add_argument("--fps", type=int, default=30)
+    parser.add_argument(
+        "--embodiment",
+        choices=available_adapters(),
+        help="retarget the action space to this embodiment (default: raw human master)",
+    )
     args = parser.parse_args(argv)
 
     plan = GuidancePlan.from_file(args.plan)
     eps = [Episode.from_file(p) for p in args.episodes]
-    meta = write_lerobot_metadata(args.out, eps, plan, fps=args.fps)
+    adapter = get_adapter(args.embodiment) if args.embodiment else None
+    meta = write_lerobot_metadata(args.out, eps, plan, fps=args.fps, adapter=adapter)
     info = meta["info"]
     print(f"Wrote LeRobot metadata to {args.out}/meta/")
     print(
-        f"  episodes={info['total_episodes']} frames={info['total_frames']} "
-        f"tasks={info['total_tasks']} features={len(info['features'])}"
+        f"  robot_type={info['robot_type']} episodes={info['total_episodes']} "
+        f"frames={info['total_frames']} tasks={info['total_tasks']} "
+        f"features={len(info['features'])}"
     )
     return 0
 

@@ -34,7 +34,7 @@
 
 ## Phase 4 — 規模化 + 治理
 - [ ] 多工人、多站、多零件
-- [ ] 衍生 SKU:retarget 到 parallel-jaw / 常見靈巧手
+- [~] 衍生 SKU:retarget 介面 + `human`/`parallel_jaw` adapter(`retarget.py`);多指靈巧手委派 dex-retargeting
 - [ ] 資料版本控管(LeRobot Hub / 內部)
 
 ## 治理(Governance)— 賣資料的存亡關鍵
