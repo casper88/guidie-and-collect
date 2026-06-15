@@ -1,0 +1,47 @@
+{
+  "episode_id": "ep_0002",
+  "plan_id": "plug_insertion_v1",
+  "plan_version": "1.0.0",
+  "duration_s": 14.2,
+  "meta": {
+    "site_id": "site_A_3f9c1",
+    "operator_id": "op_021_5cd9",
+    "consent_ref": "consent/2026-06-15_op021.json",
+    "recorded_at": "2026-06-15T09:12:00Z",
+    "device": { "headset": "Quest3", "horizonos": "v83", "external_cam": "RealSense_D435i" },
+    "calibration_ref": "calib/site_A_2026-06-15.json"
+  },
+  "streams": {
+    "egocentric_rgb": { "uri": "ep_0002/ego_rgb.mp4", "fps": 30, "resolution": [1280, 960] },
+    "external_rgb": { "uri": "ep_0002/ext_rgb.mp4", "fps": 30 },
+    "head_pose": { "uri": "ep_0002/head_pose.parquet" },
+    "hand_pose": { "uri": "ep_0002/hand_pose.parquet" },
+    "object_poses": { "uri": "ep_0002/object_poses.parquet" },
+    "force": {
+      "uri": "ep_0002/force.parquet",
+      "sources": [
+        { "source_id": "socket_J1", "type": "force_1d", "unit": "N" },
+        { "source_id": "socket_J3", "type": "force_1d", "unit": "N" }
+      ]
+    }
+  },
+  "events": [
+    { "t": 2.40, "type": "step_start", "step_id": "s1" },
+    { "t": 6.85, "type": "step_success", "step_id": "s1" },
+    { "t": 6.85, "type": "step_start", "step_id": "s2" },
+    { "t": 10.10, "type": "step_success", "step_id": "s2" },
+    { "t": 10.10, "type": "step_start", "step_id": "s3" },
+    { "t": 11.50, "type": "correction", "step_id": "s3" },
+    { "t": 13.90, "type": "step_success", "step_id": "s3" }
+  ],
+  "force_samples": [
+    { "t": 3.0, "source_id": "socket_J1", "value": 8.1 },
+    { "t": 4.5, "source_id": "socket_J1", "value": 22.7 },
+    { "t": 5.6, "source_id": "socket_J1", "value": 37.4 },
+    { "t": 6.6, "source_id": "socket_J1", "value": 12.0 },
+    { "t": 10.6, "source_id": "socket_J3", "value": 6.3 },
+    { "t": 11.8, "source_id": "socket_J3", "value": 18.9 },
+    { "t": 12.9, "source_id": "socket_J3", "value": 23.6 },
+    { "t": 13.7, "source_id": "socket_J3", "value": 9.1 }
+  ]
+}

@@ -12,9 +12,16 @@ from typing import TYPE_CHECKING
 
 __version__ = "0.0.1"
 
-__all__ = ["GuidancePlan", "Episode", "ValidationReport", "validate_episode"]
+__all__ = [
+    "GuidancePlan",
+    "Episode",
+    "ValidationReport",
+    "validate_episode",
+    "build_episode_from_capture",
+]
 
 if TYPE_CHECKING:  # pragma: no cover
+    from .autolabel import build_episode_from_capture
     from .episode import Episode
     from .guidance import GuidancePlan
     from .validate import ValidationReport, validate_episode
@@ -24,6 +31,7 @@ _LAZY = {
     "Episode": "guidie_collect.episode",
     "ValidationReport": "guidie_collect.validate",
     "validate_episode": "guidie_collect.validate",
+    "build_episode_from_capture": "guidie_collect.autolabel",
 }
 
 
