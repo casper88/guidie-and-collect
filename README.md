@@ -49,7 +49,14 @@ python -m guidie_collect.autolabel \
 python -m guidie_collect.validate \
     schema/examples/plug_insertion.episode.json \
     --plan schema/examples/plug_insertion.plan.json
+
+# 匯出 LeRobot metadata(info.json / tasks / episodes / segments)
+python -m guidie_collect.export_lerobot \
+    schema/examples/plug_insertion.plan.json \
+    schema/examples/plug_insertion.episode.json -o ./lerobot_ds
 ```
+
+完整流程:`raw capture → autolabel → master(驗證)→ LeRobot 匯出`。
 
 ## 狀態
 

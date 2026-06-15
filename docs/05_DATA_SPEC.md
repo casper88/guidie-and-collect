@@ -102,6 +102,13 @@
 ### 為何這樣設計可匯出 LeRobot
 LeRobot = 每 timestep 一列(action/observation/proprio)+ 影像 MP4。匯出器(`export_lerobot.py`)把上面的 master 在一個固定取樣率上 resample,並把選定的「動作來源」(例如手腕 6DoF + 夾爪寬度,或 retarget 後的關節角)填入 LeRobot 的 `action` 欄,影像填 observation,force/contact 填額外 feature。
 
+**目前已實作**:寫出 LeRobot 風格(v2.1)的 `meta/` 目錄——`info.json`(feature schema + 總數)、`tasks.jsonl`(語言任務,直接取自 guidance plan)、`episodes.jsonl`(每集長度/任務),以及 G&C 擴充的 `segments.jsonl`(保留逐步語言切段,這是差異化)。
+**尚未實作**:解碼 MP4 / 寫出每 timestep 的資料 Parquet——需實際擷取的二進位檔與 pin 定的 `lerobot` 版本。
+
+```bash
+python -m guidie_collect.export_lerobot <plan.json> <episode.json>... -o <out_dir>
+```
+
 ---
 
 ## Raw Capture → 自動標註 → Master(引導即標註的執行)
