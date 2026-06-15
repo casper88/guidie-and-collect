@@ -104,6 +104,30 @@ LeRobot = 每 timestep 一列(action/observation/proprio)+ 影像 MP4。匯出�
 
 ---
 
+## Raw Capture → 自動標註 → Master(引導即標註的執行)
+
+MR runtime 吐出的是 **raw capture**(尚未標註):stream 參照 + 一串離散事件
+(`step_start` / `step_success` / `step_fail` / `correction`),以及 force 取樣
+(實務在 Parquet,範例/測試允許 inline 在 `force_samples`)。`autolabel` 把它
++ guidance plan **自動**轉成上面的 master `steps`,無需人工標註:
+
+| 標籤 | 來源 |
+|---|---|
+| 切段 `t_start`/`t_end` | start 與 terminal 事件配對 |
+| 語言 `instruction` | 從 plan step 複製 |
+| `outcome`(success/fail/corrected) | terminal 事件;有 `correction` → `corrected` |
+| `peak_force_n` | 僅 `force_threshold` 步驟,取該目標點 force 視窗內 max |value| |
+
+```bash
+python -m guidie_collect.autolabel \
+    schema/examples/plug_insertion.plan.json \
+    schema/examples/plug_insertion.capture.json -o ep_0002.episode.json
+```
+
+> 產出的 episode **刻意不含** `force_samples`,以符合 `episode.schema.json`
+> (master 透過 `streams.force.uri` 指向 Parquet,而非內嵌取樣)。
+> 範例輸入見 `schema/examples/plug_insertion.capture.json`。
+
 ## 不變式(驗證器會檢查)
 1. episode 的 `plan_id` 必須存在對應 guidance plan(契約一致)。
 2. 每個 `steps[].step_id` 必須出現在 guidance plan 的 steps 裡。

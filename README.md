@@ -39,7 +39,16 @@ guidie-and-collect/
 ```bash
 pip install -e .
 pytest -q                                   # 跑測試
-python -m guidie_collect.validate schema/examples/plug_insertion.episode.json
+
+# 自動標註:raw capture + guidance plan -> 已標註的 master episode
+python -m guidie_collect.autolabel \
+    schema/examples/plug_insertion.plan.json \
+    schema/examples/plug_insertion.capture.json -o ep_0002.episode.json
+
+# 驗證 master(含力覺不變式 + 同意鏈)
+python -m guidie_collect.validate \
+    schema/examples/plug_insertion.episode.json \
+    --plan schema/examples/plug_insertion.plan.json
 ```
 
 ## 狀態

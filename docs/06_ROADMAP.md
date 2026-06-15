@@ -26,7 +26,7 @@
 - [ ] 寫成 Episode master 格式 → 過驗證器
 
 ## Phase 3 — 自動標註 + 閉環驗證(最關鍵的里程碑)
-- [ ] 由 guidance plan 自動產語言指令 + 步驟切段
+- [x] 由 guidance plan 自動產語言指令 + 步驟切段 + 成功判定 + 峰值力(`autolabel.py`)
 - [ ] 抽檢 UI(人工品管)
 - [ ] **A/B 實驗:有力覺 vs 無力覺**,各收一小批
 - [ ] 微調 SmolVLA / π0,在便宜手臂(SO-101)量「達同樣成功率所需機器人 demo 數」
