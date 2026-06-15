@@ -41,3 +41,6 @@ jobs:
             schema/examples/plug_insertion.plan.json \
             schema/examples/plug_insertion.episode.json \
             -o /tmp/lerobot_pj --embodiment parallel_jaw
+          python -m guidie_collect.report \
+            schema/examples/plug_insertion.plan.json \
+            schema/examples/plug_insertion.episode.json

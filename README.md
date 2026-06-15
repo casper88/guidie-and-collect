@@ -54,9 +54,14 @@ python -m guidie_collect.validate \
 python -m guidie_collect.export_lerobot \
     schema/examples/plug_insertion.plan.json \
     schema/examples/plug_insertion.episode.json -o ./lerobot_ds
+
+# 資料集 QA(力覺覆蓋率、成功率、驗證狀態)
+python -m guidie_collect.report \
+    schema/examples/plug_insertion.plan.json \
+    schema/examples/plug_insertion.episode.json
 ```
 
-完整流程:`raw capture → autolabel → master(驗證)→ LeRobot 匯出`。
+完整流程:`raw capture → autolabel → master(驗證)→ LeRobot 匯出` / `QA 報告`。
 
 ## 狀態
 

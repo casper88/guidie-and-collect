@@ -21,6 +21,7 @@ __all__ = [
     "write_lerobot_metadata",
     "HandFrame",
     "get_adapter",
+    "scan",
 ]
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -28,6 +29,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from .episode import Episode
     from .export_lerobot import write_lerobot_metadata
     from .guidance import GuidancePlan
+    from .report import scan
     from .retarget import HandFrame, get_adapter
     from .validate import ValidationReport, validate_episode
 
@@ -40,6 +42,7 @@ _LAZY = {
     "write_lerobot_metadata": "guidie_collect.export_lerobot",
     "HandFrame": "guidie_collect.retarget",
     "get_adapter": "guidie_collect.retarget",
+    "scan": "guidie_collect.report",
 }
 
 
