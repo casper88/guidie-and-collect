@@ -1,7 +1,10 @@
 name: CI
 
 on:
+  # PRs are covered by pull_request; only run push on the integration branch
+  # so feature-branch pushes with an open PR don't trigger a duplicate run.
   push:
+    branches: [baseline]
   pull_request:
 
 jobs:
@@ -21,7 +24,7 @@ jobs:
         run: pip install -e ".[dev]"
       - name: Run tests
         run: pytest -q
-      - name: Smoke-test CLIs
+      - name: Smoke-test the pipeline (capture -> master -> LeRobot)
         run: |
           python -m guidie_collect.autolabel \
             schema/examples/plug_insertion.plan.json \
@@ -30,3 +33,7 @@ jobs:
           python -m guidie_collect.validate \
             schema/examples/plug_insertion.episode.json \
             --plan schema/examples/plug_insertion.plan.json
+          python -m guidie_collect.export_lerobot \
+            schema/examples/plug_insertion.plan.json \
+            schema/examples/plug_insertion.episode.json /tmp/ep_0002.episode.json \
+            -o /tmp/lerobot_ds

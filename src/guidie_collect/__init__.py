@@ -18,11 +18,13 @@ __all__ = [
     "ValidationReport",
     "validate_episode",
     "build_episode_from_capture",
+    "write_lerobot_metadata",
 ]
 
 if TYPE_CHECKING:  # pragma: no cover
     from .autolabel import build_episode_from_capture
     from .episode import Episode
+    from .export_lerobot import write_lerobot_metadata
     from .guidance import GuidancePlan
     from .validate import ValidationReport, validate_episode
 
@@ -32,6 +34,7 @@ _LAZY = {
     "ValidationReport": "guidie_collect.validate",
     "validate_episode": "guidie_collect.validate",
     "build_episode_from_capture": "guidie_collect.autolabel",
+    "write_lerobot_metadata": "guidie_collect.export_lerobot",
 }
 
 

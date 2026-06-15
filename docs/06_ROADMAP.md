@@ -10,7 +10,7 @@
 - [x] 重新定位專案目的與流程(`01_VISION.md`)
 - [x] 系統架構(`04_ARCHITECTURE.md`)
 - [x] Master + Guidance Plan schema(`schema/`, `src/guidie_collect/`)
-- [x] 驗證器 + LeRobot 匯出骨架 + 測試
+- [x] 驗證器 + LeRobot metadata 匯出(info/tasks/episodes/segments)+ 測試
 
 ## Phase 1 — 引導 MVP(沿用 PDF 既有系統)
 - [ ] XMem + FoundationPose + RealSense 跑通單一插接任務
